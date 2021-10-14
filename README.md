@@ -17,25 +17,18 @@ sudo apt install python3.6
 sudo apt install python3.6-venv
 ```
 
-Then create a virtual environment for python3.6 by running
+Download the source code of the static analyzer by running
 
 ```
-python3.6 -m venv venv
+git clone https://github.com/sunblaze-ucb/privguard-artifact.git
 ```
 
-Activate the virtual environment by running
+Then create and activate a python3.6 virtual environment, install python packages, and set environment variables by running
 
 ```
-source path-to-venv/venv/bin/activate
-```
-
-Download the source code of the static analyzer, and run
-
-```
+chmod u+x path-to-repo/setup.sh
 path-to-repo/setup.sh
 ```
-
-to install the static analyzer.
 
 ## How to use
 
