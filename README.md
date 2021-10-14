@@ -37,7 +37,7 @@ This codebase contains (1) a policy parser to translate Legalease policy strings
 To test the policy parser, run
 
 ```
-python path-to-repo/src/parser/policy_tree.py
+python path-to-repo/src/parser/policy_parser.py
 ```
 
 and input a valid policy string (e.g. "ALLOW FILTER age >= 18 AND SCHEMA NotPHI, h2 AND FILTER gender == 'M' ALLOW (FILTER gender == 'M' OR (FILTER gender == 'F' AND SCHEMA PHI))") in Legalease. The program will output the policy translated to Python objects.
