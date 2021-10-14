@@ -405,7 +405,7 @@ class Policy(object):
 
 
     def runPrivacy(self, priv_tech, **kwargs):
-        newPolicy = [[self._runPrivacy(req, cols) for req in clause] for clause in self.policy]
+        newPolicy = [[self._runPrivacy(req, priv_tech) for req in clause] for clause in self.policy]
         return Policy(newPolicy).dealSat().dealUnsat()
 
     def _runPrivacy(self, req, priv_tech, **kwargs):
@@ -420,6 +420,8 @@ class Policy(object):
             elif priv_tech == 'DP':
                 if kwargs['eps'] < req.eps and kwargs['delta'] < req.delta:
                     return Satisfied()
+            else:
+                return Satisfied()
         return req
 
     def dealUnsat(self):

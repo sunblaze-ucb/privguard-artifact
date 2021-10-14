@@ -8,17 +8,14 @@ def run(data_folder, **kwargs):
     np = kwargs.get('numpy')
     pd = kwargs.get('pandas')
     lgb = kwargs.get('lightgbm')
-    scipy = kwargs.get('scipy')
+    LGBMClassifier = lgb.LGBMClassifier
 
     train_df = pd.read_csv(data_folder + 'train/data.csv')
 
     features = train_df[[x for x in train_df.columns if x.startswith("var")]]
     target = train_df["target"]
 
-    model = lgb.LGBMClassifier(**{ 'learning_rate':0.06, 'max_bin': 165, 'max_depth': 5, 'min_child_samples': 153,
-            'min_child_weight': 0.1, 'min_split_gain': 0.0018, 'n_estimators': 41, 'num_leaves': 6, 'reg_alpha': 2.1,
-            'reg_lambda': 2.54, 'objective': 'binary', 'n_jobs': -1})
-        
-    model = model.fit(features.values, target.values)
+    cls = LGBMClassifier(learning_rate=0.06, max_bin=165, max_depth=5, min_child_samples=153, min_child_weight=0.1, min_split_gain=0.0018, n_estimators=41, num_leaves=6, reg_alpha=2.1, reg_lambda=2.54, objective='binary', n_jobs=-1) 
+    model = cls.fit(features.values, target.values)
 
     return model

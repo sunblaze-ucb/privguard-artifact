@@ -46,8 +46,8 @@ def analyze(module, data_folder):
 
 def parse():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--script', help='Path to the program', default='./examples/program/trans_pred_example.py')# default='./examples/program/ehr_example.py')
-    parser.add_argument('--data_folder', help='Path to the data', default='./examples/data/trans_pred_example/')#default='./examples/data/ehr_example/')
+    parser.add_argument('--script', help='Path to the program', default='./examples/program/trans_pred_example.py')
+    parser.add_argument('--data_folder', help='Path to the data', default='./examples/data/trans_pred_example/')
     return parser.parse_args()
 
 if __name__ == '__main__':

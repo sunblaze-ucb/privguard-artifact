@@ -47,9 +47,14 @@ class LGBMClassifier:
 
         self.data = X
         self.label = y
-        return Blackbox(X.policy.join(y.policy))
+        return Blackbox((X.policy.join(y.policy)).runPrivacy('Aggregation'))
 
     def predict_proba(self, X, raw_score=False, num_iteration=None, pred_leaf=False, pred_contrib=False, **kwargs):
 
         result = pd.concat([pd.merge(self.data, self.label), pd.merge(X, self.label)]) 
         return Blackbox(result)
+
+    def __str__(self):
+        return 'LGBMClassifier'
+
+    __repr__ = __str__
