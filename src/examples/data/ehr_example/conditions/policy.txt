@@ -1,0 +1,3 @@
+ALLOW FILTER CONSENT == 'Y'
+  AND FILTER DESCRIPTION == 'ViralSinusitisDisorder'
+  AND PRIVACY Aggregation
