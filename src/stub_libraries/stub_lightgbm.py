@@ -26,12 +26,14 @@ import stub_numpy as np
 import stub_pandas as pd
 import math
 from blackbox import Blackbox
+from stub_numpy import ndarray
 
-class Dataset:
+class Dataset(Blackbox):
     
     def __init__(self, data, label=None, reference=None, weight=None, group=None, init_score=None, silent=False, feature_name='auto', categorical_feature='auto', params=None, free_raw_data=True):
         self.data = data
         self.label = label
+        self.policy = data.policy
 
     def num_features(self):
 
@@ -58,3 +60,14 @@ class LGBMClassifier:
         return 'LGBMClassifier'
 
     __repr__ = __str__
+
+class Booster(Blackbox):
+    def __init__(self, params=None, train_set=None, model_file=None, model_str=None, silent='warn'):
+        self.policy = train_set.policy
+        self.best_iteration = 0
+
+    def predict(self, data, start_iteration=0, num_iteration=None, raw_score=False, pred_leaf=False, pred_contrib=False, data_has_header=False, is_reshape=True, **kwargs):
+        return ndarray(self.policy.join(data.policy))
+
+def train(params, train_set, num_boost_round=100, valid_sets=None, valid_names=None, fobj=None, feval=None, init_model=None, feature_name='auto', categorical_feature='auto', early_stopping_rounds=None, evals_result=None, verbose_eval='warn', learning_rates=None, keep_training_booster=False, callbacks=None):
+    return Booster(params=params, train_set=train_set)

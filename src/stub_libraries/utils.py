@@ -20,54 +20,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-""" Function summaries for the numpy library. """
+""" Utility functions and classes + stub built-in functions. """
 
-import os
-import sys
-sys.path.append(os.environ.get('PRIVGUARD') + "/src/parser")
+from tabular import Tabular
 
-import numpy as np
-import stub_pandas as pd
-import math
-from blackbox import Blackbox
-from policy_tree import Policy
+def len_(arr):
+    if isinstance(arr, Tabular):
+        if isinstance(arr.shape[0], int):
+            return arr.shape[0]
+        else:
+            raise NotImplementedError
+    else:
+        return len(arr)
 
-int8 = np.int8
-int64 = np.int64
-nan = np.nan
-ptp = np.ptp
-float = np.float
-newaxis = np.newaxis
-
-class ndarray(Blackbox):
-
-    def __format__(self, _):
-        return str(self)
-
-    def __str__(self):
-        return f'ndarray({self.policy})'
-
-def sum(a, **kwargs):
-    newPolicy = Policy()
-    for x in a:
-        newPolicy = newPolicy.join(x.policy)
-    return Blackbox(newPolicy)
-
-def tanh(x, **kwargs):
-    return Blackbox(x.policy)
-
-def log1p(x, **kwargs):
-    return Blackbox(x.policy)
-
-def exp(x, **kwargs):
-    return Blackbox(x.policy)
-
-def expm1(x, **kwargs):
-    return Blackbox(x.policy)
-
-def log(x, **kwargs): 
-    return Blackbox(x.policy)
-
-def corrcoef(x, y, **kwargs):
-
-    return Blackbox(x.policy.join(y.policy))
+class UniversalIndex():
+    def __getitem__(self, key, *args, **kwargs):
+        return UniversalIndex()

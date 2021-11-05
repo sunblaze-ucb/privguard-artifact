@@ -24,16 +24,17 @@
 
 import os
 import sys
-sys.path.append(os.environ.get('PRIVGUARD') + "/src/parser")
+sys.path.append(os.path.join(os.environ.get('PRIVGUARD'), "src/parser"))
 
 import stub_pandas as pd
 from functools import partial, reduce
 from policy_tree import Policy, DNF
+from attribute import Satisfied
 
 
 class Blackbox:
 
-    def __init__(self, policy=Policy(DNF([])), *args, **kwargs):
+    def __init__(self, policy=Policy([[Satisfied()]]), *args, **kwargs):
 
         self.policy = policy
         #self._add_data(list(args) + list(kwargs.values()))
@@ -50,13 +51,19 @@ class Blackbox:
     def method_missing(self, _name, *args, **kwargs):
 
         print(f'Blackbox method missing: {_name}')
-        self._add_data(list(args) + list(kwargs.values()))
-        return self
+        return Blackbox(self.policy.copy())
+
+    def copy(self):
+        return Blackbox(policy=self.policy.copy())
+
+    def __str__(self):
+        return f"Blackbox: {self.policy}"
+
+    __repr__ = __str__
 
     def __getattr__(self, _name):
-        if _name == 'parentDF':
-            raise RuntimeError('Black box has no parent dataframe')
-        return partial(self.method_missing, _name)
+        if _name in ['count']:
+            return partial(self.method_missing, _name)
 
     def __getitem__(self, key):
         return self
@@ -96,4 +103,3 @@ class Blackbox:
     def __lt__(self, other):
         self._add_data([other])
         return self
-

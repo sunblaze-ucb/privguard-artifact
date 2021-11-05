@@ -1,7 +1,10 @@
+""" Customer Transaction Prediction.
 # This script is based on the content from: 
 # 1. https://www.kaggle.com/dott1718/922-in-3-minutes by @dott1718
 # 2. https://www.kaggle.com/titericz/giba-single-model-public-0-9245-private-0-9234
 # 3. https://www.kaggle.com/nawidsayed/lightgbm-and-cnn-3rd-place-solution
+"""
+from os import path
 
 def run(data_folder, **kwargs):
 
@@ -10,7 +13,7 @@ def run(data_folder, **kwargs):
     lgb = kwargs.get('lightgbm')
     LGBMClassifier = lgb.LGBMClassifier
 
-    train_df = pd.read_csv(data_folder + 'train/data.csv')
+    train_df = pd.read_csv(path.join(data_folder, 'train/data.csv'))
 
     features = train_df[[x for x in train_df.columns if x.startswith("var")]]
     target = train_df["target"]

@@ -1,0 +1,3 @@
+ALLOW ROLE WikiAdministrator
+  AND PURPOSE TimeSeriesAnalysis
+  AND PRIVACY Aggregation

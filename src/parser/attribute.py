@@ -208,9 +208,8 @@ class RoleAttribute(Attribute):
         self.role = role
 
     def is_stricter_than(self, other: Attribute):
-        # TODO: how to do this?
         if isinstance(other, RoleAttribute):
-            print(f'Warning: imprecise role comparison: {self} vs {other}: {self.role == other.role}')
+            # print(f'Warning: imprecise role comparison: {self} vs {other}: {self.role == other.role}')
             if self.role == other.role:
                 return True
         return False
@@ -248,7 +247,7 @@ class PrivacyAttribute(Attribute):
             raise ValueError('Invalid/Unsupported privacy technique.')
 
     def is_stricter_than(self, other: Attribute):
-        if self.priv_tech == other.priv_tech:
+        if isinstance(other, PrivacyAttribute) and self.priv_tech == other.priv_tech:
             if self.priv_tech == 'k-anonymity':
                 if self.k >= other.k:
                     return True
@@ -287,8 +286,11 @@ class PurposeAttribute(Attribute):
         self.purpose = purpose
 
     def is_stricter_than(self, other: Attribute):
-        # TODO: finish this
-        pass
+        if isinstance(other, PurposeAttribute):
+            # print(f'Warning: imprecise role comparison: {self} vs {other}: {self.role == other.role}')
+            if self.purpose == other.purpose:
+                return True
+        return False
 
     def __str__(self):
         return 'purpose: ' + self.purpose
