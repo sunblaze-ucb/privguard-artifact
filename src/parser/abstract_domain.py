@@ -25,6 +25,8 @@
 from typed_value import ExtendV
 
 class Lattice(object):
+    """ Parent class for abstract lattices in PrivGuard policies. """
+
     def is_subset_of(self, other):
         pass
 
@@ -35,6 +37,8 @@ class Lattice(object):
         pass
 
 class ClosedIntervalL(Lattice):
+    """ ClosedInterval lattice for extended values. """
+
     def __init__(self, lower, upper, lower_bound=None, upper_bound=None):
         assert isinstance(lower, ExtendV)
         assert isinstance(upper, ExtendV)
@@ -64,6 +68,8 @@ class ClosedIntervalL(Lattice):
         return self.__str__()
 
 class SchemaL(Lattice):
+    """ Schema lattice. """
+
     def __init__(self, schema, full_schema=None):
         self.schema = schema
         self.full_schema = full_schema
@@ -85,5 +91,3 @@ class SchemaL(Lattice):
 
     def __repr__(self):
         return self.__str__()
-
-# TODO: add lattices for ROLE/PURPOSE/PRIVACY

@@ -52,4 +52,22 @@ We provide two example programs to test the static analyzer. To run the two exam
 
 ```
 python path-to-repo/src/analyze.py --script path-to-script --data_folder path-to-folder
-``` 
+```
+
+## Code structure
+
+The code is organized into three sub-directories under `src` directory: (1) `parser` which contains the parser and implementation of PrivGuard policies; (2) `stub_libraries` which contains the implementation of function summaries; (3) `examples` which contains the example programs and corresponding policies.
+
+The organization of the `parser directory` is as below.
+
+```
+            policy_tree.py
+                 |
+           policy_parser.py
+           /           \
+abstract_domain.py     attribute.py
+      |
+typed_value.py
+```
+
+typed_value.py defines the basic values types (e.g. integers, strings) used in the policy. abstract_domain.py defines the corresponding lattice built on top of the defined values. attribute.py defines the attributes in the policy. policy_parser.py is the real parser that converts the policy strings into lists of basic tokens. policy_tree.py further organizes the tokens in a tree structure convenient for analysis.

@@ -27,7 +27,7 @@ from typed_value import IntegerV, StringV, ExtendV
 from abstract_domain import ClosedIntervalL
 from attribute import RoleAttribute, PurposeAttribute, RedactAttribute, PrivacyAttribute, FilterAttribute, SchemaAttribute
 
-
+# define basic parsers for tokens in the policy.
 COMPARATOR = oneOf(['==', '!=', '>', '>=', '<', '<=']).setName('COMPARATOR')
 COLUMN = Word(alphanums).setName('COLUMN')
 INTEGER = Word(nums).setName('INTEGER').addParseAction(lambda toks: IntegerV(int(toks[0])))
@@ -38,23 +38,31 @@ LIST = delimitedList(COLUMN)
 VARIABLE = Word(alphanums).setName('VARIABLE')
 
 def filter_action(toks):
+    """ How to parse a filter attribute. """
     col = toks[1]
     interval = None
     if toks[2] == '==':
         interval = ClosedIntervalL(ExtendV(toks[3]), ExtendV(toks[3]))
     if toks[2] == '!=':
-        raise NotImplemented
+        raise NotImplemented("'!=' is currently not implemented. Please use '>=', '<=', '>', '<' to express '!='.")
     if toks[2] == '<=':
         interval = ClosedIntervalL(ExtendV('ninf'), ExtendV(toks[3]))
     if toks[2] == '>=':
         interval = ClosedIntervalL(ExtendV(toks[3]), ExtendV('inf'))
     if toks[2] == '<':
-        raise NotImplemented
+        if isinstance(toks[3], IntegerV):
+            interval = ClosedIntervalL(ExtendV('ninf'), ExtendV(toks[3]-1))
+        else:
+            raise NotImplemented("'<' is only implemented for integer types. Please try '<='.")
     if toks[2] == '>':
-        raise NotImplemented
+        if isinstance(toks[3], IntegerV):
+            interval = ClosedIntervalL(ExtendV(toks[3]+1), ExtendV('inf'))
+        else:
+            raise NotImplemented("'>' is only implemented for integer types. Please try '>='.")
     return FilterAttribute(col, interval)
 
 def redact_action(toks):
+    """ How to parse a redact attribute. """
     if len(toks) == 3:
         return RedactAttribute(toks[1])
     elif len(toks) == 4:
@@ -66,9 +74,11 @@ def redact_action(toks):
         return RedactAttribute(toks[1], (toks[2], toks[4]))
 
 def schema_action(toks):
+    """ How to parse a schema attribute. """
     return SchemaAttribute(toks[1:])
 
 def privacy_action(toks):
+    """ How to parse a privacy attribute. """
     if toks[1] == 'k-anonymity':
         return PrivacyAttribute(toks[1], k=toks[2])
     elif toks[1] == 'l-diversity':
@@ -81,11 +91,14 @@ def privacy_action(toks):
         return PrivacyAttribute(toks[1])
 
 def role_action(toks):
+    """ How to parse a role attribute. """
     return RoleAttribute(toks[1])
 
 def purpose_action(toks):
+    """ How to parse a purpose attribute. """
     return PurposeAttribute(toks[1])
 
+# parsers for attributes.
 FILTER_ATTRIBUTE = ('FILTER' + COLUMN + COMPARATOR + (INTEGER | STRING)).addParseAction(filter_action)
 REDACT_ATTRIBUTE = ('REDACT' + COLUMN + Suppress('(') + Optional(SCALAR_INT) + ':' + Optional(SCALAR_INT) + Suppress(')')).addParseAction(redact_action)
 SCHEMA_ATTRIBUTE = ('SCHEMA' + LIST).addParseAction(schema_action)
@@ -94,8 +107,10 @@ ROLE_ATTRIBUTE = ('ROLE' + VARIABLE).addParseAction(role_action)
 PURPOSE_ATTRIBUTE = ('PURPOSE' + VARIABLE).addParseAction(purpose_action)
 ATTRIBUTE = FILTER_ATTRIBUTE | REDACT_ATTRIBUTE | SCHEMA_ATTRIBUTE | PRIVACY_ATTRIBUTE | ROLE_ATTRIBUTE | PURPOSE_ATTRIBUTE
 
+# the parser for clauses
 CLAUSE = (Suppress('ALLOW') + infix_notation(ATTRIBUTE, [('AND', 2, OpAssoc.RIGHT), ('OR', 2, OpAssoc.RIGHT)]))
 
+# the parser for policies
 policy_parser = OneOrMore(CLAUSE)
 
 if __name__ == '__main__':

@@ -25,16 +25,20 @@
 import datetime
 
 def min_exval(v1, v2):
+    """ Return the smaller one between two extended values."""
     if v1 <= v2:
         return v1
     return v2
 
 def max_exval(v1, v2):
+    """ Return the larger one between two extended values. """
     if v1 >= v2:
         return v2
     return v1
 
 class Val(object):
+
+    """ Parent class for values in PrivGuard policies. """
 
     def __init__(self, val):
         # print(f'Warning: making a Val({val})')
@@ -85,17 +89,27 @@ class Val(object):
 
 class IntegerV(Val):
 
+    """ Integer values in PrivGuard policies. """
+
     def __init__(self, val):
         Val.__init__(self, val)
 
-    
+    def __add__(self, other):
+        return IntegerV(self.val + other)
+
+    def __sub__(self, other):
+        return IntegerV(self.val - other)
 
 class StringV(Val):
+
+    """ String values in PrivGuard policies. """
 
     def __init__(self, val):
         Val.__init__(self, val)
 
 class DateV(Val):
+
+    """ Date values in PrivGuard policies. """
 
     def __init__(self, val: datetime.datetime):
         Val.__init__(self, val)
