@@ -1,0 +1,4 @@
+ALLOW PRIVACY Aggregation
+  AND REDACT ID ( : )
+  AND ROLE ADMINISTRATOR
+  AND PURPOSE TransactionPrediction

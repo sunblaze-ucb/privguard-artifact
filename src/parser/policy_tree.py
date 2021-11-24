@@ -225,6 +225,9 @@ class Policy(object):
         for clause in p:
             self.policy.add(ConjunctClause(clause))
 
+    def copy(self):
+        return Policy(policy_str=self.policy.copy())
+
     def __str__(self):
         return ",\n  ".join([str(clause) for clause in self.policy])
 
@@ -260,7 +263,7 @@ class Policy(object):
                     newClause = newClause.add(req)
             newPolicy.append(newClause.attr_lst)
 
-        return Policy(newPolicy)
+        return Policy(newPolicy).dealSat().dealUnsat()
 
     def runFilter(self, col, other, op):
         """

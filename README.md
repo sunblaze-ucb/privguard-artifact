@@ -23,11 +23,11 @@ Download the source code of the static analyzer by running
 git clone https://github.com/sunblaze-ucb/privguard-artifact.git
 ```
 
-Then create and activate a python3.6 virtual environment, install python packages, and set environment variables by running
+Then enter the root directory of the repo, and create and activate a python3.6 virtual environment, install python packages, and set environment variables by running
 
 ```
-chmod u+x path-to-repo/setup.sh
-path-to-repo/setup.sh
+chmod u+x ./setup.sh
+./setup.sh
 ```
 
 ## How to use
@@ -48,10 +48,12 @@ To test converting a policy into its DNF form, run
 python path-to-repo/src/parser/policy_tree.py
 ```
 
-We provide two example programs to test the static analyzer. To run the two examples, use the following script with correct flag values. Please make sure your environment variable is correctly set before testing the below functionality (see setup.sh for more information).
+## Example Test Cases
+
+We are still actively cleaning up the example programs and corresponding function summaries. We currently provide 5 example programs (0, 4, 5, 6, 23) to test the static analyzer. To run the examples, use the following script with correct flag values. Please make sure your environment variable is correctly set before testing the below functionality (see setup.sh for more information).
 
 ```
-python path-to-repo/src/analyze.py --script path-to-script --data_folder path-to-folder
+python path-to-repo/src/analyze.py --example_id 4
 ```
 
 ## Code structure
